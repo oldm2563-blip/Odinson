@@ -287,11 +287,17 @@ body {
 
 <body>
     <div class="container">
+        @can('view', $link)
         <main class="main-content">
-            <h1>{{ $link->title }}</h1>
+            <h1>{{ $link->title }} 
+                <form action="/favor/{{ $link->id }}" method="POST">
+                    @csrf
+                    <button>Favorite</button>
+                </form>
+            </h1>
             <div class="cat-con">
                 <div class="category-item">
-                    <h2 class="category-title">Link</h2>
+                    <h2 class="category-title">Link <a href="/share-link/{{ $link->id }}">Share</a></h2>
                     <a class="category-link" href="{{ $link->link }}" title="{{ $link->link }}">{{ $link->link }}</a>
                 </div>
             </div>
@@ -305,10 +311,11 @@ body {
                     <span class="tag">No Tags</span>
                 @endforelse
             </div>
-             </div>
+            </div>
+            @can('update', $link)
             <div class="cs">
                 <form action="/assign_tag/{{ $link->id }}" method="POST">
-                    <h2>choose from avaible Tages</h2>
+                    <h2>choose from avaible Tags</h2>
                     @csrf
                     <select name="tag_id" id="">
                         @foreach ($tags as $tag)
@@ -323,7 +330,7 @@ body {
             </div>
             <div class="cs">
                 <form action="/create_tag" method="POST">
-                    <h2>Add a new Tage</h2>
+                    <h2>Add a new Tag</h2>
                     @csrf
                     <input type="text" name="name" placeholder="Enter tag name">
                     <button type="submit">Add</button>
@@ -331,8 +338,18 @@ body {
                 @if (session('success'))
                     <p class="suc">{{ session('success') }}</p>
                 @endif
+                @if ($errors->any())
+                <p>{{ $errors->first() }}</p>
+                @endif
             </div>
+            @endcan
         </main>
+        @endcan
+        @cannot('view', $link)
+        <main class="main-content">
+            <h1>You Cannot Look Here :)</h1>
+        </main>
+        @endcannot
         <aside class="sidebar">
             <div>
                 <h1>Welcome Back {{ auth()->user()->name }}</h1>
@@ -341,7 +358,8 @@ body {
                 <li><a href="/">Home</a></li>
                 <li><a href="/categories">Categories</a></li>
                 <li><a href="/links">Links</a></li>
-                <li><a href="">Profile</a></li>
+                <li><a href="/favors">favors</a></li>
+                <li><a href="/bin">Bin</a></li>
                 <li><form action="/logout"><button>Logout</button></form></li>
             </div>
         </aside>

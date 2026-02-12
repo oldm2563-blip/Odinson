@@ -292,15 +292,40 @@ body {
                 @if (session('success'))
                     <p class="suc">{{ session('success') }}</p>
                 @endif
+                @if ($errors->any())
+                <p>{{ $errors->first() }}</p>
+                @endif
             </div>
             <div class="cat-con">
+                <h2>My Links</h2>
                 @forelse ($links as $link)
                 <div class="category-item">
                     <a class="category-title" href="/link/{{ $link->id }}">{{ $link->title }}</a>
                     <a target="_blank" rel="noopener noreferrer" class="category-link" href="{{ $link->link }}" title="{{ $link->link }}">{{ $link->link }}</a>
+                    <form action="/link-delete/{{ $link->id }}" method="POST">
+                    @csrf
+                    <button type="submit">Delete</button>
+                </form>
                 </div>
                 @empty
                     <h3>No Links Has been made</h3>
+                @endforelse
+            </div>
+            <div class="cat-con">
+                <h2>Shared Links</h2>
+                @forelse ($lonks as $link)
+                <div class="category-item">
+                    <a class="category-title" href="/link/{{ $link->id }}">{{ $link->title }}</a>
+                    <a target="_blank" rel="noopener noreferrer" class="category-link" href="{{ $link->link }}" title="{{ $link->link }}">{{ $link->link }}</a>
+                    @can('delete', $link)
+                    <form action="/link-delete/{{ $link->id }}" method="POST">
+                    @csrf
+                    <button type="submit">Delete</button>
+                </form>
+                @endcan
+                </div>
+                @empty
+                    <h3>No Links Has been Shared</h3>
                 @endforelse
             </div>
         </main>
@@ -312,7 +337,8 @@ body {
                 <li><a href="/">Home</a></li>
                 <li><a href="/categories">Categories</a></li>
                 <li><a href="/links">Links</a></li>
-                <li><a href="">Profile</a></li>
+                <li><a href="/favors">favors</a></li>
+                <li><a href="/bin">Bin</a></li>
                 <li><form action="/logout"><button>Logout</button></form></li>
             </div>
         </aside>

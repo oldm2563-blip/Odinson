@@ -208,6 +208,9 @@ body {
                 @if (session('success'))
                     <p class="suc">{{ session('success') }}</p>
                 @endif
+                @if ($errors->any())
+                <p>{{ $errors->first() }}</p>
+                @endif
             </div>
             <div class="cat-con">
                 @forelse ($cats as $cat)
@@ -234,7 +237,8 @@ body {
                 <li><a href="/">Home</a></li>
                 <li><a href="/categories">Categories</a></li>
                 <li><a href="/links">Links</a></li>
-                <li><a href="">Profile</a></li>
+                <li><a href="/favors">favors</a></li>
+                <li><a href="/bin">Bin</a></li>
                 <li><form action="/logout"><button>Logout</button></form></li>
             </div>
         </aside>
