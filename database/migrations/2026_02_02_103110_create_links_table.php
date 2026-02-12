@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('link');
             $table->foreignId('user_id')->constrained();
             $table->foreignId('catagory_id')->constrained('catagories')->cascadeOnDelete();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
