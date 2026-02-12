@@ -9,7 +9,8 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    public function create_account(Request $request){
+    public function create_account(Request $request)
+    {
         $incomingFields = $request->validate([
             'name' => ['required', Rule::unique('users', 'name')],
             'email' => ['required', 'email', Rule::unique('users', 'email')],
@@ -17,24 +18,37 @@ class UserController extends Controller
         ]);
         $incomingFields['password'] = bcrypt($incomingFields['password']);
         $user = User::create($incomingFields);
+        $user->role()->attach([2]);
         auth()->login($user);
         return redirect('/');
     }
-    public function logout(){
+
+    public function logout()
+    {
         auth()->logout();
         return redirect('/login');
     }
-    public function login(Request $request){
+
+    public function login(Request $request)
+    {
         $incomingFields = $request->validate([
             'loginname' => 'required',
-            'loginpassword'=> 'required'
+            'loginpassword' => 'required'
         ]);
-        if(auth()->attempt(['name' => $incomingFields['loginname'], 'password' => $incomingFields['loginpassword']])){
+        if (auth()->attempt(['name' => $incomingFields['loginname'], 'password' => $incomingFields['loginpassword']])) {
             $request->session()->regenerate();
-            return redirect('/');
-        }
-        else{
+            if (auth()->user()->role->contains('role', 'admin')) {
+                return redirect('admin');
+            } else {
+                return redirect('/');
+            }
+        } else {
             return redirect('/login')->with('failed', 'Login Failed Check Name or password');
         }
+    }
+
+    public function admin()
+    {
+        return view('admin.admin');
     }
 }
