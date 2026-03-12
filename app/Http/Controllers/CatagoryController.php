@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryValidation;
 use App\Models\Catagory;
 use Illuminate\Http\Request;
 
@@ -17,11 +18,9 @@ class CatagoryController extends Controller
         $categories = auth()->user()->catagory()->latest()->get();
         return view('pages.categories', ['cats' => $categories]);
     }
-    public function create_category(Request $request)
+    public function create_category(CategoryValidation $request)
     {
-        $incomingFields = $request->validate([
-            'name' => 'required'
-        ]);
+        $incomingFields = $request->validated();
         $incomingFields['user_id'] = auth()->id();
         $incomingFields['name'] = strip_tags($incomingFields['name']);
         Catagory::create($incomingFields);
@@ -36,15 +35,14 @@ class CatagoryController extends Controller
     {
         return view('pages.editcategory', ['category' => $catagory]);
     }
-    public function edit_category(Catagory $catagory, Request $request)
+    public function edit_category(Catagory $catagory, CategoryValidation $request)
     {
-        $incomingFields = $request->validate([
-            'name' => 'required'
-        ]);
+        $incomingFields = $request->validated();
         $catagory->update($incomingFields);
         return redirect('/categories')->with('success', 'Category have been edited successfully');
     }
-    public function cat(Catagory $catagory){
+    public function cat(Catagory $catagory)
+    {
         $links = $catagory->link()->get();
         return view('pages.category', ['cat' => $catagory, 'links' => $links]);
     }

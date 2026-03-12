@@ -189,44 +189,36 @@ body {
 .category-item {
     cursor: pointer;
 }
-.suc{
-    margin-top: 10px;
-    color: #29B587;
+.back{
+    padding: 10px 18px;
+    background-color: #29B587;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
 }
 </style>
 
 <body>
     <div class="container">
         <main class="main-content">
+            <a class="back" href="/categories">Back</a>
             <div class="cs">
-                <form action="/create_cat" method="POST">
-                    <h2>Create Category</h2>
+                <form action="/share_link/{{ $link->id }}" method="POST">
                     @csrf
-                    <input type="text" name="name" placeholder="Enter category name">
-                    <button type="submit">Add</button>
+                    <select name='user_id' id="">
+                        @forelse ($users as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                        @empty
+                            <p>apparently there aren't any users</p>
+                        @endforelse
+                    </select>
+                    <select name="permissions" id="">
+                        <option value="1">Edit</option>
+                        <option value="2">View</option>
+                    </select>
+                    <button type="submit">Send</button>
                 </form>
-                @if (session('success'))
-                    <p class="suc">{{ session('success') }}</p>
-                @endif
-                @if ($errors->any())
-                <p>{{ $errors->first() }}</p>
-                @endif
-            </div>
-            <div class="cat-con">
-                @forelse ($cats as $cat)
-                <div class="category-item">
-                    <a class="category-link" href="category/{{ $cat->id }}">{{ $cat->name }}</a>
-                      <div class="cat-actions">
-                <a href="/edit-category/{{ $cat->id }}">Edit</a>
-                <form action="/category-delete/{{ $cat->id }}" method="POST">
-                    @csrf
-                    <button type="submit">Delete</button>
-                </form>
-            </div>
-                </div>
-                @empty
-                    <h3>No Categories Has been made</h3>
-                @endforelse
             </div>
         </main>
         <aside class="sidebar">

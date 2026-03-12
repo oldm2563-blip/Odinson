@@ -198,26 +198,11 @@ body {
 <body>
     <div class="container">
         <main class="main-content">
-            <div class="cs">
-                <form action="/create_cat" method="POST">
-                    <h2>Create Category</h2>
-                    @csrf
-                    <input type="text" name="name" placeholder="Enter category name">
-                    <button type="submit">Add</button>
-                </form>
-                @if (session('success'))
-                    <p class="suc">{{ session('success') }}</p>
-                @endif
-                @if ($errors->any())
-                <p>{{ $errors->first() }}</p>
-                @endif
-            </div>
             <div class="cat-con">
                 @forelse ($cats as $cat)
                 <div class="category-item">
-                    <a class="category-link" href="category/{{ $cat->id }}">{{ $cat->name }}</a>
+                    <h3>{{ $cat->name }}</h3>
                       <div class="cat-actions">
-                <a href="/edit-category/{{ $cat->id }}">Edit</a>
                 <form action="/category-delete/{{ $cat->id }}" method="POST">
                     @csrf
                     <button type="submit">Delete</button>
@@ -234,11 +219,11 @@ body {
                 <h1>Welcome Back {{ auth()->user()->name }}</h1>
             </div>
             <div>
-                <li><a href="/">Home</a></li>
-                <li><a href="/categories">Categories</a></li>
-                <li><a href="/links">Links</a></li>
-                <li><a href="/favors">favors</a></li>
-                <li><a href="/bin">Bin</a></li>
+                <li><a href="/admin">Home</a></li>
+                <li><a href="/admin/categories">Categories</a></li>
+                <li><a href="/admin/links">Links</a></li>
+                <li><a href="/admin/users">Users</a></li>
+                <li><a href="/admin/logs">Activities</a></li>
                 <li><form action="/logout"><button>Logout</button></form></li>
             </div>
         </aside>

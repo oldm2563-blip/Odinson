@@ -146,18 +146,18 @@ h2 {
 <body>
     <div class="container">
     <main class="main-content">
-        <h1>hello</h1>
+        <h1>hello Admin</h1>
     </main>
     <aside class="sidebar">
         <div>
             <h1>Welcome Back {{ auth()->user()->name }}</h1>
         </div>
         <div>
-            <li><a href="/">Home</a></li>
-            <li><a href="/categories">Categories</a></li>
-            <li><a href="/links">Links</a></li>
-            <li><a href="/favors">favors</a></li>
-            <li><a href="/bin">Bin</a></li>
+            <li><a href="/admin">Home</a></li>
+            <li><a href="/admin/categories">Categories</a></li>
+            <li><a href="/admin/links">Links</a></li>
+            <li><a href="/admin/users">Users</a></li>
+            <li><a href="/admin/logs">Activities</a></li>
             <li><form action="/logout"><button class="logout">Logout</button></form></li>
         </div>
     </aside>

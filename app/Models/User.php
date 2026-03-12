@@ -3,9 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Catagory;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -51,5 +52,17 @@ class User extends Authenticatable
     }
     public function link(){
         return $this->hasMany(Link::class, 'user_id');
+    }
+    public function role(){
+        return $this->belongsToMany(Role::class, 'user_role');
+    }
+    public function sharedlink(){
+        return $this->belongsToMany(Link::class, 'user_link')->withPivot('access_type'); 
+    }
+    public function log(){
+        return $this->hasMany(Log::class, 'user_id');
+    }
+    public function favorits(){
+        return $this->belongsToMany(Link::class, 'favorites');
     }
 }

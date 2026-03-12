@@ -6,6 +6,7 @@
     <title>Create Category</title>
 </head>
 <style>
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -17,14 +18,17 @@ body {
     font-family: 'Segoe UI', Tahoma, sans-serif;
 }
 
+
 .container {
     display: flex;
     flex-direction: row-reverse;
     min-height: 100vh;
 }
 
+
 .main-content {
     flex: 1;
+    min-width: 0; 
     padding: 30px;
     display: flex;
     flex-direction: column;
@@ -69,8 +73,8 @@ body {
     font-weight: 500;
 }
 
-.cs,
-.cat-con {
+
+.cs {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
@@ -84,7 +88,6 @@ body {
 }
 
 .cs h2 {
-    margin-right: 10px;
     font-size: 18px;
     color: #333;
 }
@@ -114,8 +117,36 @@ body {
     background-color: #1e8c66;
 }
 
+.suc {
+    margin-top: 10px;
+    color: #29B587;
+}
+.cs form {
+    display: flex;
+    flex-wrap: wrap;  
+    gap: 10px;
+    align-items: center;
+}
+
+.cs input,
+.cs select {
+    flex: 1 1 200px;     
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    min-width: 0;        
+}
+
+.cs button {
+    flex-shrink: 0;      
+}
+
 .cat-con {
-    max-height: 400px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    max-height: 300px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -131,30 +162,43 @@ body {
     border-radius: 10px;
 }
 
+
 .category-item {
-    width: 100%;
+    display: flex;
+    align-items: center;
     padding: 12px 16px;
     border: 1px solid #ddd;
     border-radius: 6px;
     background-color: #fafafa;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    width: 100%;        
+    min-width: 0;      
 }
+
 
 .category-item:hover {
     border-color: #29B587;
     background-color: #f3fff9;
 }
 
-.category-item h3 {
-    font-size: 15px;
-    font-weight: 600;
+
+.category-link {
+    color: #333;
+    font-size: 14px;
+    white-space: normal;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    width: 100%;
 }
+
+.category-link:hover {
+    text-decoration: underline;
+}
+
 
 .cat-actions {
     display: none;
     gap: 10px;
+    flex-shrink: 0; 
 }
 
 .category-item:hover .cat-actions {
@@ -174,58 +218,50 @@ body {
     font-weight: 600;
     cursor: pointer;
 }
-.category-link {
-    color: #333;
-    text-decoration: none;
-    font-size: 15px;
-    font-weight: 600;
-    flex: 1;
+.category-item {
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fafafa;
+    width: 100%;        
+    min-width: 0;
 }
 
-.category-link:hover {
+.category-item:hover {
+    border-color: #29B587;
+    background-color: #f3fff9;
+}
+
+.category-title {
+    font-weight: 600;
+    color: #29B587;
+    text-decoration: none;
+    margin-bottom: 4px;
+    font-size: 16px;
+}
+
+.category-title:hover {
     text-decoration: underline;
 }
 
-.category-item {
-    cursor: pointer;
-}
-.suc{
-    margin-top: 10px;
-    color: #29B587;
-}
+
 </style>
 
 <body>
     <div class="container">
         <main class="main-content">
-            <div class="cs">
-                <form action="/create_cat" method="POST">
-                    <h2>Create Category</h2>
-                    @csrf
-                    <input type="text" name="name" placeholder="Enter category name">
-                    <button type="submit">Add</button>
-                </form>
-                @if (session('success'))
-                    <p class="suc">{{ session('success') }}</p>
-                @endif
-                @if ($errors->any())
-                <p>{{ $errors->first() }}</p>
-                @endif
-            </div>
             <div class="cat-con">
-                @forelse ($cats as $cat)
+                <h2>My Links</h2>
+                @forelse ($links as $link)
                 <div class="category-item">
-                    <a class="category-link" href="category/{{ $cat->id }}">{{ $cat->name }}</a>
-                      <div class="cat-actions">
-                <a href="/edit-category/{{ $cat->id }}">Edit</a>
-                <form action="/category-delete/{{ $cat->id }}" method="POST">
-                    @csrf
-                    <button type="submit">Delete</button>
-                </form>
-            </div>
+                    <a class="category-title" href="/link/{{ $link->id }}">{{ $link->title }}</a>
+                    <a target="_blank" rel="noopener noreferrer" class="category-link" href="{{ $link->link }}" title="{{ $link->link }}">{{ $link->link }}</a>
                 </div>
                 @empty
-                    <h3>No Categories Has been made</h3>
+                    <h3>No Links Has been made</h3>
                 @endforelse
             </div>
         </main>
